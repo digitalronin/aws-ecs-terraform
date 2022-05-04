@@ -41,3 +41,7 @@ resource "aws_lb_listener" "hello_world" {
     type             = "forward"
   }
 }
+
+output "load_balancer_ip" {
+  value = aws_lb.default.dns_name
+}

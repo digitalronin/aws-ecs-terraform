@@ -2,6 +2,15 @@ resource "aws_ecs_cluster" "main" {
   name = "example-cluster"
 }
 
+resource "aws_cloudwatch_log_group" "log-group" {
+  name = "${var.app_name}-${var.app_environment}-logs"
+
+  tags = {
+    Application = var.app_name
+    Environment = var.app_environment
+  }
+}
+
 resource "aws_ecs_service" "hello_world" {
   name            = "hello-world-service"
   cluster         = aws_ecs_cluster.main.id
@@ -38,6 +47,14 @@ resource "aws_ecs_task_definition" "hello_world" {
     "memory": 2048,
     "name": "hello-world-app",
     "networkMode": "awsvpc",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${aws_cloudwatch_log_group.log-group.id}",
+        "awslogs-region": "${var.aws_region}",
+        "awslogs-stream-prefix": "${var.app_name}-${var.app_environment}"
+      }
+    },
     "portMappings": [
       {
         "containerPort": 3000,
@@ -50,8 +67,8 @@ DEFINITION
 }
 
 resource "aws_security_group" "hello_world_task" {
-  name        = "example-task-security-group"
-  vpc_id      = aws_vpc.default.id
+  name   = "example-task-security-group"
+  vpc_id = aws_vpc.default.id
 
   ingress {
     protocol        = "tcp"

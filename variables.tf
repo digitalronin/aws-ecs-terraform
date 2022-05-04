@@ -11,10 +11,19 @@ variable "aws_secret_key" {
 variable "aws_region" {
   type        = string
   description = "AWS Region"
-  default     = "us-east-2"
 }
 
 variable "app_count" {
-  type = number
+  type    = number
   default = 1
+}
+
+variable "app_name" {
+  type    = string
+  default = "hello-world"
+}
+
+variable "app_environment" {
+  type    = string
+  default = "dev"
 }

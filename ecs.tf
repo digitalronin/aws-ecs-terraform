@@ -44,7 +44,13 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "kevinwang5658/nodejs-hello-world",
+    "image": "digitalronin/nodejs-hello-world",
+    "environment": [
+      {
+        "name": "PORT",
+        "value": "3000"
+      }
+    ],
     "cpu": 1024,
     "memory": 2048,
     "name": "hello-world-app",

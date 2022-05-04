@@ -1,0 +1,13 @@
+{
+  "name": "nodejs-hello-world",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "docker-build": "sh build.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

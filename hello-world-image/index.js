@@ -1,7 +1,7 @@
 const http = require('http');
 const port = process.env.PORT;
 
-const MESSAGE = process.env.MESSAGE || 'Hello World';
+const MESSAGE = process.env.MESSAGE || 'This is a new message';
 
 const server = http.createServer((req, res) => {
   console.info(`Server received request: ${req.url}`);

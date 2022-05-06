@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "digitalronin/nodejs-hello-world",
+    "image": "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:47790ea",
     "environment": [
       {
         "name": "PORT",

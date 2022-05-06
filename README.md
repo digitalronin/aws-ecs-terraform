@@ -46,6 +46,52 @@ This will output the public DNS name of the load-balancer. You can hit this
 with curl and see the "Hello World" response, and the log entries in
 Cloudwatch.
 
+## Update docker image
+
+The ECS task deploys docker images from the ECR.
+
+The ECR URI is an output from the terraform code, e.g.
+
+```
+ecr-uri = "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr"
+```
+
+### Push a new docker image
+
+1. Tag your image with the ECR URI
+
+e.g. To tag a docker image which is locally tagged as
+`digitalronin/nodejs-hello-world` with a git commit reference of 47790ea:
+
+```
+docker tag digitalronin/nodejs-hello-world:latest 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:47790ea
+```
+
+2. Login to the ECR
+
+```
+aws ecr --region us-east-2 get-login-password | docker login --username AWS --password-stdin 510324149440.dkr.ecr.us-east-2.amazonaws.com
+```
+
+3. Push the image
+
+```
+docker push 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:47790ea
+```
+
+### Deploy new docker image
+
+Change the `image` value in `ecs.tf` to the new value, i.e.
+
+```
+    "image": "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:aaa",
+```
+
+...then run `terraform apply`
+
+Changes should take effect in a few minutes. NB: Requests will be served by
+both the old and new versions of the docker image, for a minute or two.
+
 ## Clean up
 
 ```
@@ -54,4 +100,10 @@ terraform destroy
 
 ## TODO
 
+- add RDS
+- add Redis
+- deploy a rails 7 app with hotwire
+- setup CD
+- lock down the networking side
+- reduce deployer IAM permissions to a minimum
 - add a pre-commit hook to run `terraform fmt`

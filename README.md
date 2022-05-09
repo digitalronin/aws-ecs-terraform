@@ -102,7 +102,11 @@ terraform destroy
 
 - add RDS
 - add Redis
-- deploy a rails 7 app with hotwire
+- deploy a rails 7 app with hotwire e.g.
+    docker tag nishitetsubusrails-rails 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:nishibus-2
+    docker push 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:nishibus-2
+- add SSL
+- configure autoscaling
 - setup CD
 - lock down the networking side
 - reduce deployer IAM permissions to a minimum

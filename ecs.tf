@@ -44,11 +44,23 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:47790ea",
+    "image": "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:nishibus-2",
     "environment": [
       {
         "name": "PORT",
         "value": "3000"
+      },
+      {
+        "name": "RAILS_MASTER_KEY",
+        "value": "${var.rails_master_key}"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "${var.database_url}"
+      },
+      {
+        "name": "REDIS_URL",
+        "value": "${var.redis_url}"
       }
     ],
     "cpu": 1024,

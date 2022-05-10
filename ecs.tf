@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:nishibus-2",
+    "image": "${aws_ecr_repository.aws-ecr.repository_url}:redis-pinger1",
     "environment": [
       {
         "name": "PORT",

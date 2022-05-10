@@ -46,6 +46,11 @@ This will output the public DNS name of the load-balancer. You can hit this
 with curl and see the "Hello World" response, and the log entries in
 Cloudwatch.
 
+
+```
+curl $(terraform output -raw load_balancer_ip)
+```
+
 ## Update docker image
 
 The ECS task deploys docker images from the ECR.
@@ -64,19 +69,21 @@ e.g. To tag a docker image which is locally tagged as
 `digitalronin/nodejs-hello-world` with a git commit reference of 47790ea:
 
 ```
-docker tag digitalronin/nodejs-hello-world:latest 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:47790ea
+ecr=$(terraform output -raw ecr-uri)
+docker tag digitalronin/nodejs-hello-world:latest $ecr:47790ea
 ```
 
 2. Login to the ECR
 
 ```
-aws ecr --region us-east-2 get-login-password | docker login --username AWS --password-stdin 510324149440.dkr.ecr.us-east-2.amazonaws.com
+ecr=$(terraform output -raw ecr-uri)
+aws ecr --region us-east-2 get-login-password | docker login --username AWS --password-stdin $ecr
 ```
 
 3. Push the image
 
 ```
-docker push 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:47790ea
+docker push $ecr:47790ea
 ```
 
 ### Deploy new docker image
@@ -84,7 +91,7 @@ docker push 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:477
 Change the `image` value in `ecs.tf` to the new value, i.e.
 
 ```
-    "image": "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:aaa",
+    "image": "${aws_ecr_repository.aws-ecr.repository_url}:47790ea",
 ```
 
 ...then run `terraform apply`

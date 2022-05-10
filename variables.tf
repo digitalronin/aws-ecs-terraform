@@ -29,17 +29,11 @@ variable "app_environment" {
 }
 
 variable "rails_master_key" {
-  type    = string
+  type = string
 }
 
 # TODO: This should come from the attributes of an RDS and Elasticache Redis
 # instance we create via terraform
 variable "database_url" {
-  type    = string
-}
-
-# TODO: This should come from the attributes of an RDS and Elasticache Redis
-# instance we create via terraform
-variable "redis_url" {
-  type    = string
+  type = string
 }

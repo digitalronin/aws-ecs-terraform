@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "${aws_ecr_repository.aws-ecr.repository_url}:redis-pinger1",
+    "image": "${aws_ecr_repository.aws-ecr.repository_url}:redis-pinger2",
     "environment": [
       {
         "name": "PORT",
@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "hello_world" {
       },
       {
         "name": "REDIS_URL",
-        "value": "${var.redis_url}"
+        "value": "redis://${aws_elasticache_cluster.redis.cache_nodes[0].address}"
       }
     ],
     "cpu": 1024,
@@ -94,6 +94,13 @@ resource "aws_security_group" "hello_world_task" {
     protocol        = "tcp"
     from_port       = 3000
     to_port         = 3000
+    security_groups = [aws_security_group.lb.id]
+  }
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = 6379
+    to_port         = 6379
     security_groups = [aws_security_group.lb.id]
   }
 

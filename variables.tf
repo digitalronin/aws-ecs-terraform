@@ -32,7 +32,7 @@ variable "rails_app_port" {
   default = "3000"
 }
 
-variable "rails_app_image" {
+variable "image_tag" {
   type        = string
   description = "Rails app. docker image tag (must exist in the ECR)"
 }

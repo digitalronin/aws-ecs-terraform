@@ -86,11 +86,11 @@ docker push $ecr:47790ea
 
 ### Deploy new docker image
 
-Change the `TF_VAR_rails_app_image` environment variable to the new tag value,
+Change the `TF_VAR_image_tag` environment variable to the new tag value,
 i.e.
 
 ```
-export TF_VAR_rails_app_image=47790ea
+export TF_VAR_image_tag=47790ea
 ```
 
 ...then run `terraform apply`

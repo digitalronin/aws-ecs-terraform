@@ -35,7 +35,3 @@ resource "aws_elasticache_cluster" "redis" {
 locals {
   redis_url = "redis://${aws_elasticache_cluster.redis.cache_nodes[0].address}"
 }
-
-output "redis_url" {
-  value = local.redis_url
-}

@@ -37,7 +37,3 @@ resource "aws_db_instance" "postgres" {
 locals {
   database_url = "postgresql://${aws_db_instance.postgres.username}:${var.dbpassword}@${aws_db_instance.postgres.endpoint}/${aws_db_instance.postgres.db_name}"
 }
-
-output "database_url" {
-  value = local.database_url
-}

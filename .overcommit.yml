@@ -1,0 +1,4 @@
+PreCommit:
+  TerraformFmt:
+    enabled: true
+    command: ['terraform', 'fmt']

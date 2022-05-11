@@ -15,6 +15,7 @@ accessible from the internet. It also sets up cloudwatch logging.
 - AWS account
 - Terraform 1.1.9
 - Docker (for the AWS CLI)
+- [Overcommit](https://github.com/sds/overcommit) (for git commit hooks)
 
 ## Setup
 

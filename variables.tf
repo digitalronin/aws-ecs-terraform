@@ -19,8 +19,7 @@ variable "app_count" {
 }
 
 variable "app_name" {
-  type    = string
-  default = "hello-world"
+  type = string
 }
 
 variable "app_environment" {
@@ -37,7 +36,6 @@ variable "rails_app_image" {
   type        = string
   description = "Rails app. docker image tag (must exist in the ECR)"
 }
-
 
 variable "rails_master_key" {
   type = string

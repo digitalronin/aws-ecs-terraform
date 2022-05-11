@@ -11,7 +11,7 @@ resource "aws_security_group" "rds_sg" {
     protocol        = "tcp"
     from_port       = 5432
     to_port         = 5432
-    security_groups = [aws_security_group.hello_world_task.id]
+    security_groups = [aws_security_group.rails_app_task.id]
   }
 
   egress {

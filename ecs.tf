@@ -11,29 +11,29 @@ resource "aws_cloudwatch_log_group" "log-group" {
   }
 }
 
-resource "aws_ecs_service" "hello_world" {
-  name            = "hello-world-service"
+resource "aws_ecs_service" "rails_app_service" {
+  name            = "rails-app-service"
   cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.hello_world.arn
+  task_definition = aws_ecs_task_definition.rails_app_task.arn
   desired_count   = var.app_count
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups = [aws_security_group.hello_world_task.id]
+    security_groups = [aws_security_group.rails_app_task.id]
     subnets         = aws_subnet.private.*.id
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.hello_world.id
-    container_name   = "hello-world-app"
+    target_group_arn = aws_lb_target_group.rails_app_tg.id
+    container_name   = "rails-app"
     container_port   = var.rails_app_port
   }
 
-  depends_on = [aws_lb_listener.hello_world]
+  depends_on = [aws_lb_listener.rails_app]
 }
 
-resource "aws_ecs_task_definition" "hello_world" {
-  family                   = "hello-world-app"
+resource "aws_ecs_task_definition" "rails_app_task" {
+  family                   = "rails-app"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 1024
@@ -65,7 +65,7 @@ resource "aws_ecs_task_definition" "hello_world" {
     ],
     "cpu": 1024,
     "memory": 2048,
-    "name": "hello-world-app",
+    "name": "rails-app",
     "networkMode": "awsvpc",
     "logConfiguration": {
       "logDriver": "awslogs",
@@ -86,7 +86,7 @@ resource "aws_ecs_task_definition" "hello_world" {
 DEFINITION
 }
 
-resource "aws_security_group" "hello_world_task" {
+resource "aws_security_group" "rails_app_task" {
   name   = "example-task-security-group"
   vpc_id = aws_vpc.default.id
 

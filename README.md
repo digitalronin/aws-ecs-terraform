@@ -6,9 +6,12 @@ Initially based on [this blog
 post](https://www.architect.io/blog/2021-03-30/create-and-manage-an-aws-ecs-cluster-with-terraform/)
 and [this one](https://blog.ulysse.io/post/setting-up-ecs-with-terraform/)
 
-This creates an ECS cluster, and a task which runs a "hello-world" web server
-image, along with a load-balancer and all the networking stuff to make it
-accessible from the internet. It also sets up cloudwatch logging.
+This creates an ECS cluster, and a task which runs a rails application web
+server image, along with a load-balancer and all the networking stuff to make
+it accessible from the internet.
+
+It also creates and enables the rails app. to access a Redis cluster (of 1
+node), a Postgres RDS database, and sets up cloudwatch logging.
 
 ## Pre-requisites
 
@@ -44,8 +47,7 @@ terraform apply
 ```
 
 This will output the public DNS name of the load-balancer. You can hit this
-with curl and see the "Hello World" response, and the log entries in
-Cloudwatch.
+with curl and see the home page, and the log entries in Cloudwatch.
 
 
 ```
@@ -54,15 +56,9 @@ curl $(terraform output -raw load_balancer_ip)
 
 ## Update docker image
 
-The ECS task deploys docker images from the ECR.
+The ECS task deploys a docker image from the ECR.
 
-The ECR URI is an output from the terraform code, e.g.
-
-```
-ecr-uri = "510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr"
-```
-
-### Push a new docker image
+To push a new docker image:
 
 1. Tag your image with the ECR URI
 
@@ -84,15 +80,17 @@ aws ecr --region us-east-2 get-login-password | docker login --username AWS --pa
 3. Push the image
 
 ```
+ecr=$(terraform output -raw ecr-uri)
 docker push $ecr:47790ea
 ```
 
 ### Deploy new docker image
 
-Change the `image` value in `ecs.tf` to the new value, i.e.
+Change the `TF_VAR_rails_app_image` environment variable to the new tag value,
+i.e.
 
 ```
-    "image": "${aws_ecr_repository.aws-ecr.repository_url}:47790ea",
+export TF_VAR_rails_app_image=47790ea
 ```
 
 ...then run `terraform apply`
@@ -108,14 +106,9 @@ terraform destroy
 
 ## TODO
 
-- add RDS
-- add Redis
-- deploy a rails 7 app with hotwire e.g.
-    docker tag nishitetsubusrails-rails 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:nishibus-2
-    docker push 510324149440.dkr.ecr.us-east-2.amazonaws.com/hello-world-dev-ecr:nishibus-2
+- add an initialisation task to run once per deployment (e.g. `rails db:migrate`)
 - add SSL
 - configure autoscaling
 - setup CD
 - lock down the networking side
 - reduce deployer IAM permissions to a minimum
-- add a pre-commit hook to run `terraform fmt`

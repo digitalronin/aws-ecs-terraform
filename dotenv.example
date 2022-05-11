@@ -5,7 +5,4 @@ export TF_VAR_aws_region=us-east-2
 # Required by the Ruby on Rails application
 export TF_VAR_rails_master_key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-# TODO: These should come from the attributes of an RDS and Elasticache Redis
-# instance we create via terraform
-export TF_VAR_database_url=postgres://xxxx
-export TF_VAR_redis_url=redis://xxxx
+export TF_VAR_dbpassword=XXXXXXXXXXX

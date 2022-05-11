@@ -32,8 +32,6 @@ variable "rails_master_key" {
   type = string
 }
 
-# TODO: This should come from the attributes of an RDS and Elasticache Redis
-# instance we create via terraform
-variable "database_url" {
+variable "dbpassword" {
   type = string
 }

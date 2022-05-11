@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "${aws_ecr_repository.aws-ecr.repository_url}:redis-pinger2",
+    "image": "${aws_ecr_repository.aws-ecr.repository_url}:postgres-pinger1",
     "environment": [
       {
         "name": "PORT",
@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "hello_world" {
       },
       {
         "name": "DATABASE_URL",
-        "value": "${var.database_url}"
+        "value": "${local.database_url}"
       },
       {
         "name": "REDIS_URL",

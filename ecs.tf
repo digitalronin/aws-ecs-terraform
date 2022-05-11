@@ -26,7 +26,7 @@ resource "aws_ecs_service" "hello_world" {
   load_balancer {
     target_group_arn = aws_lb_target_group.hello_world.id
     container_name   = "hello-world-app"
-    container_port   = 3000
+    container_port   = var.rails_app_port
   }
 
   depends_on = [aws_lb_listener.hello_world]
@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "hello_world" {
     "environment": [
       {
         "name": "PORT",
-        "value": "3000"
+        "value": "${var.rails_app_port}"
       },
       {
         "name": "RAILS_MASTER_KEY",
@@ -77,8 +77,8 @@ resource "aws_ecs_task_definition" "hello_world" {
     },
     "portMappings": [
       {
-        "containerPort": 3000,
-        "hostPort": 3000
+        "containerPort": ${var.rails_app_port},
+        "hostPort": ${var.rails_app_port}
       }
     ]
   }
@@ -92,8 +92,8 @@ resource "aws_security_group" "hello_world_task" {
 
   ingress {
     protocol        = "tcp"
-    from_port       = 3000
-    to_port         = 3000
+    from_port       = var.rails_app_port
+    to_port         = var.rails_app_port
     security_groups = [aws_security_group.lb.id]
   }
 

@@ -28,6 +28,11 @@ variable "app_environment" {
   default = "dev"
 }
 
+variable "rails_app_port" {
+  type = string
+  default = "3000"
+}
+
 variable "rails_master_key" {
   type = string
 }

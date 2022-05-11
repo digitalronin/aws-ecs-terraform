@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "hello_world" {
       },
       {
         "name": "REDIS_URL",
-        "value": "redis://${aws_elasticache_cluster.redis.cache_nodes[0].address}"
+        "value": "${local.redis_url}"
       }
     ],
     "cpu": 1024,

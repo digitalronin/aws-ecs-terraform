@@ -4,5 +4,5 @@ export TF_VAR_aws_region=us-east-2
 
 # Required by the Ruby on Rails application
 export TF_VAR_rails_master_key=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
+export TF_VAR_rails_app_image=XXXXXX
 export TF_VAR_dbpassword=XXXXXXXXXXX

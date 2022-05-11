@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "${aws_ecr_repository.aws-ecr.repository_url}:postgres-pinger1",
+    "image": "${local.rails_app_image}",
     "environment": [
       {
         "name": "PORT",

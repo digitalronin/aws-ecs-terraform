@@ -29,9 +29,15 @@ variable "app_environment" {
 }
 
 variable "rails_app_port" {
-  type = string
+  type    = string
   default = "3000"
 }
+
+variable "rails_app_image" {
+  type        = string
+  description = "Rails app. docker image tag (must exist in the ECR)"
+}
+
 
 variable "rails_master_key" {
   type = string

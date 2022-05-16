@@ -1,6 +1,7 @@
 # AWS ECS Demo
 
-Demonstrate how to deploy a containerised application to Amazon ECS using terraform.
+Demonstrate how to deploy a containerised Ruby on Rails application to Amazon
+ECS using terraform.
 
 Initially based on [this blog
 post](https://www.architect.io/blog/2021-03-30/create-and-manage-an-aws-ecs-cluster-with-terraform/)
@@ -17,7 +18,7 @@ node), a Postgres RDS database, and sets up cloudwatch logging.
 
 - AWS account
 - Terraform 1.1.9
-- Docker (for the AWS CLI)
+- Docker (to use the aws-cli & terraform docker image)
 - [Overcommit](https://github.com/sds/overcommit) (for git commit hooks)
 
 ## Setup
@@ -29,14 +30,11 @@ node), a Postgres RDS database, and sets up cloudwatch logging.
 - Copy `dotenv.example` to `.env` and replace the dummy values with the real
   credentials.
 
-- Set an alias to run the AWS CLI via docker
+After this, all commands are assumed to be run from within a shell on the
+`digitalronin/aws-tf` docker image, which you can launch by running:
 
 ```
-. .env
-alias aws="docker run --rm -ti \
-  -e AWS_ACCESS_KEY_ID=$TF_VAR_aws_access_key \
-  -e AWS_SECRET_ACCESS_KEY=$TF_VAR_aws_secret_key \
-  -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli:2.5.7"
+./shell.sh
 ```
 
 ## Create/Update infrastructure
@@ -48,7 +46,6 @@ terraform apply
 
 This will output the public DNS name of the load-balancer. You can hit this
 with curl and see the home page, and the log entries in Cloudwatch.
-
 
 ```
 curl $(terraform output -raw load_balancer_ip)
@@ -106,7 +103,7 @@ terraform destroy
 
 ## TODO
 
-- add an initialisation task to run once per deployment (e.g. `rails db:migrate`)
+- replace instances of "example"
 - add SSL
 - configure autoscaling
 - setup CD
